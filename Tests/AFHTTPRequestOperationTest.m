@@ -82,7 +82,7 @@
     expect(success).will.beTruthy();
 }
 
-- (void)testThatRedirectBlockIsCalledMultipleTimesWhen302IsEncountered{
+- (void)testThatRedirectBlockIsCalledMultipleTimesWhenMultiple302sAreEncountered{
     __block NSInteger numberOfRedirects = 0;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"/redirect/5" relativeToURL:AFNetworkingTestsBaseURL()]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
