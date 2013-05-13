@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 AFNetworking. All rights reserved.
 //
 
-#import "AFNetworkingTests.h"
+#import "AFTestCase.h"
 
-@interface AFHTTPRequestOperationTests : SenTestCase
+@interface AFHTTPRequestOperationTests : AFTestCase
 @end
 
 @implementation AFHTTPRequestOperationTests

@@ -1,12 +1,13 @@
 //
-//  AFNetworkingTests.h
-//  AFNetworking
+//  AFTestCase.h
+//  AFNetworking Tests
 //
-//  Created by Blake Watters on 5/10/13.
+//  Created by Kevin Harwood on 5/13/13.
 //  Copyright (c) 2013 AFNetworking. All rights reserved.
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+
 #import "AFNetworking.h"
 
 #define EXP_SHORTHAND YES
@@ -15,3 +16,7 @@
 
 extern NSString *AFNetworkingTestsBaseURLString;
 NSURL *AFNetworkingTestsBaseURL(void);
+
+@interface AFTestCase : SenTestCase
+
+@end
