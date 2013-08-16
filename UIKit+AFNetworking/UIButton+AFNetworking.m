@@ -106,20 +106,21 @@
 {
     
     [self setValue:placeholderImage forKeyPath:keyPath];
-#warning
-//    NSURLSessionTask *task = [[[self class] af_sharedHTTPClient] dataTaskWithRequest:urlRequest success:^(NSHTTPURLResponse *response, id <AFURLResponseSerialization> __unused serializer, id responseObject) {
-//        if (success) {
-//            success(response, responseObject);
-//        } else if (responseObject) {
-//            [self setValue:responseObject forKeyPath:keyPath];
-//        }
-//    } failure:^(NSError *error) {
-//        if (failure) {
-//            failure(error);
-//        }
-//    }];
-//
-//    [task resume];
+    //TODO REVIEW THIS
+    [[[self class] af_sharedHTTPClient] GET:urlRequest.URL.absoluteString
+                                 parameters:nil
+                                    success:^(NSHTTPURLResponse *response, id responseObject) {
+                                        if (success) {
+                                            success(response, responseObject);
+                                        } else if (responseObject) {
+                                            [self setValue:responseObject forKeyPath:keyPath];
+                                        }
+                                    }
+                                    failure:^(NSError *error) {
+                                        if (failure) {
+                                            failure(error);
+                                        }
+                                    }];
 }
 
 - (void)cancelImageDataTasks {
