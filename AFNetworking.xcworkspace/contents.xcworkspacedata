@@ -20,16 +20,22 @@
          location = "group:AFHTTPRequestOperation.m">
       </FileRef>
       <FileRef
-         location = "group:AFURLSessionManager.h">
-      </FileRef>
-      <FileRef
-         location = "group:AFURLSessionManager.m">
-      </FileRef>
-      <FileRef
          location = "group:AFHTTPClient.h">
       </FileRef>
       <FileRef
          location = "group:AFHTTPClient.m">
+      </FileRef>
+      <FileRef
+         location = "group:AFHTTPOperationClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:AFHTTPOperationClient.m">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/kevin.harwood/GIT/AFNetworkingKH/AFNetworking/AFURLSessionClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/kevin.harwood/GIT/AFNetworkingKH/AFNetworking/AFURLSessionClient.m">
       </FileRef>
       <FileRef
          location = "group:AFSerialization.h">

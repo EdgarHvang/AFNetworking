@@ -30,7 +30,6 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-#import "AFURLSessionManager.h"
 #import "AFHTTPRequestOperation.h"
 #import "AFSerialization.h"
 
@@ -91,7 +90,7 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 };
 
 @protocol AFMultipartFormData;
-@interface AFHTTPClient : AFURLSessionManager <NSCoding, NSCopying>
+@interface AFHTTPClient : NSObject <NSCoding, NSCopying>
 
 ///---------------------------------------
 /// @name Accessing HTTP Client Properties
@@ -143,19 +142,6 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
  @return The newly-initialized HTTP client
  */
 - (instancetype)initWithBaseURL:(NSURL *)url;
-
-/**
- Initializes an `AFHTTPClient` object with the specified base URL.
-
- This is the designated initializer.
-
- @param url The base URL for the HTTP client.
- @param configuration The configuration used to create the managed session.
-
- @return The newly-initialized HTTP client
- */
-- (instancetype)initWithBaseURL:(NSURL *)url
-           sessionConfiguration:(NSURLSessionConfiguration *)configuration;
 
 ///-----------------------------------
 /// @name Managing Reachability Status
@@ -217,70 +203,6 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
                                              parameters:(NSDictionary *)parameters
                               constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block __attribute__((deprecated));
 
-///---------------------------------------
-/// @name Managing HTTP Request Operations
-///---------------------------------------
-
-/**
- Creates an `AFHTTPRequestOperation`, setting the operation's request serializer and response serializers to those of the HTTP client.
-
- @param request The request object to be loaded asynchronously during execution of the operation.
- @param success A block object to be executed when the request operation finishes successfully. This block has no return value and takes two arguments: the created request operation and the object created from the response data of request.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes two arguments:, the created request operation and the `NSError` object describing the network or parsing error that occurred.
- */
-- (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)request
-                                                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
-
-/**
- Enqueues an `AFHTTPRequestOperation` to the HTTP client's operation queue.
-
- @param operation The HTTP request operation to be enqueued.
- */
-- (void)enqueueHTTPRequestOperation:(AFHTTPRequestOperation *)operation;
-
-/**
- Cancels all operations in the HTTP client's operation queue whose URLs match the specified HTTP method and URL string.
-
- This method only cancels `AFHTTPRequestOperations` whose request URL matches the HTTP client base URL with the path appended. For complete control over the lifecycle of enqueued operations, you can access the `operationQueue` property directly, which allows you to, for instance, cancel operations filtered by a predicate, or simply use `-cancelAllRequests`. Note that the operation queue may include non-HTTP operations, so be sure to check the type before attempting to directly introspect an operation's `request` property.
-
- @param method The HTTP method to match for the cancelled requests, such as `GET`, `POST`, `PUT`, or `DELETE`. If `nil`, all request operations with matching URLs will be cancelled.
- @param URLString The URL string used to create the request URL.
- */
-- (void)cancelAllHTTPOperationsWithMethod:(NSString *)method
-                                URLString:(NSString *)URLString;
-
-- (void)cancelAllHTTPOperationsWithMethod:(NSString *)method
-                                     path:(NSString *)path __attribute__((deprecated));
-
-///---------------------------------------
-/// @name Batching HTTP Request Operations
-///---------------------------------------
-
-/**
- Creates and enqueues an `AFHTTPRequestOperation` to the HTTP client's operation queue for each specified request object into a batch. When each request operation finishes, the specified progress block is executed, until all of the request operations have finished, at which point the completion block also executes.
-
- Operations are created by passing the specified `NSURLRequest` objects in `requests`, using `-HTTPRequestOperationWithRequest:success:failure:`, with `nil` for both the `success` and `failure` parameters.
-
- @param requests The `NSURLRequest` objects used to create and enqueue operations.
- @param progressBlock A block object to be executed upon the completion of each request operation in the batch. This block has no return value and takes two arguments: the number of operations that have already finished execution, and the total number of operations.
- @param completionBlock A block object to be executed upon the completion of all of the request operations in the batch. This block has no return value and takes a single argument: the batched request operations.
- */
-- (void)enqueueBatchOfHTTPRequestOperationsWithRequests:(NSArray *)requests
-                                          progressBlock:(void (^)(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations))progressBlock
-                                        completionBlock:(void (^)(NSArray *operations))completionBlock;
-
-/**
- Enqueues the specified request operations into a batch. When each request operation finishes, the specified progress block is executed, until all of the request operations have finished, at which point the completion block also executes.
-
- @param operations The request operations used to be batched and enqueued.
- @param progressBlock A block object to be executed upon the completion of each request operation in the batch. This block has no return value and takes two arguments: the number of operations that have already finished execution, and the total number of operations.
- @param completionBlock A block object to be executed upon the completion of all of the request operations in the batch. This block has no return value and takes a single argument: the batched request operations.
- */
-- (void)enqueueBatchOfHTTPRequestOperations:(NSArray *)operations
-                              progressBlock:(void (^)(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations))progressBlock
-                            completionBlock:(void (^)(NSArray *operations))completionBlock;
-
 ///---------------------------
 /// @name Making HTTP Requests
 ///---------------------------
@@ -295,10 +217,10 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)GET:(NSString *)URLString
-                   parameters:(NSDictionary *)parameters
-                      success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                      failure:(void (^)(NSError *error))failure;
+- (id)GET:(NSString *)URLString
+parameters:(NSDictionary *)parameters
+  success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+  failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a `HEAD` request.
@@ -310,10 +232,10 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)HEAD:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
-                       success:(void (^)(NSHTTPURLResponse *response))success
-                       failure:(void (^)(NSError *error))failure;
+- (id)HEAD:(NSString *)URLString
+parameters:(NSDictionary *)parameters
+   success:(void (^)(NSHTTPURLResponse *response))success
+   failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a `POST` request.
@@ -325,10 +247,10 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
-                       success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                       failure:(void (^)(NSError *error))failure;
+- (id)POST:(NSString *)URLString
+parameters:(NSDictionary *)parameters
+   success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+   failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a multipart `POST` request.
@@ -341,11 +263,11 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
-     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
-                       success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                       failure:(void (^)(NSError *error))failure;
+- (id)POST:(NSString *)URLString
+parameters:(NSDictionary *)parameters
+constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+   success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+   failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a `PUT` request.
@@ -357,10 +279,10 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)PUT:(NSString *)URLString
-                   parameters:(NSDictionary *)parameters
-                      success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                      failure:(void (^)(NSError *error))failure;
+- (id)PUT:(NSString *)URLString
+parameters:(NSDictionary *)parameters
+  success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+  failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a `PATCH` request.
@@ -372,10 +294,10 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)PATCH:(NSString *)URLString
-                     parameters:(NSDictionary *)parameters
-                        success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                        failure:(void (^)(NSError *error))failure;
+- (id)PATCH:(NSString *)URLString
+ parameters:(NSDictionary *)parameters
+    success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+    failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and runs an `NSURLSessionDataTask` with a `DELETE` request.
@@ -387,90 +309,14 @@ typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
 
  @see -runDataTaskWithRequest:success:failure:
  */
-- (NSURLSessionDataTask *)DELETE:(NSString *)URLString
-                      parameters:(NSDictionary *)parameters
-                         success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                         failure:(void (^)(NSError *error))failure;
-
-///-------------------------
-/// @name Running Data Tasks
-///-------------------------
-
-/**
- Creates an `NSURLSessionDataTask` with the specified request.
- 
- @param request The HTTP request for the request.
- @param success A block object to be executed when the task finishes successfully. This block has no return value and takes three arguments: the server response, the serializer used to serialize the response data, and the response object created by that serializer.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a single arguments: the error describing the network or parsing error that occurred.
- */
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                                      success:(void (^)(NSHTTPURLResponse *response, id <AFURLResponseSerialization> serializer, id responseObject))success
-                                      failure:(void (^)(NSError *error))failure;
+- (id)DELETE:(NSString *)URLString
+  parameters:(NSDictionary *)parameters
+     success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+     failure:(void (^)(NSError *error))failure;
 
 
-///---------------------------
-/// @name Running Upload Tasks
-///---------------------------
-
-/**
- Creates an `NSURLSessionUploadTask` with the specified request for a local file.
-
- @param request The HTTP request for the request.
- @param fileURL A URL to the local file to be uploaded.
- @param progress A block object to be executed multiple times as data is uploaded. This block has no return value and takes three arguments: the number of bytes written since the last time the progress block was called, the total bytes written, and the total bytes expected to be written during the request, as initially determined by the length of the HTTP body.
- @param success A block object to be executed when the task finishes successfully. This block has no return value and takes three arguments: the server response, the serializer used to serialize the response data, and the response object created by that serializer.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a single arguments: the error describing the network or parsing error that occurred.
- */
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                         progress:(void (^)(uint32_t bytesWritten, uint32_t totalBytesWritten, uint32_t totalBytesExpectedToWrite))progress
-                                          success:(void (^)(NSHTTPURLResponse *response, id <AFURLResponseSerialization> serializer, id responseObject))success
-                                          failure:(void (^)(NSError *error))failure;
-
-/**
- Creates an `NSURLSessionUploadTask` with the specified request for an HTTP body.
-
- @param request The HTTP request for the request.
- @param bodyData A data object containing the HTTP body to be uploaded. 
- @param progress A block object to be executed multiple times as data is uploaded. This block has no return value and takes three arguments: the number of bytes written since the last time the progress block was called, the total bytes written, and the total bytes expected to be written during the request, as initially determined by the length of the HTTP body.
- @param success A block object to be executed when the task finishes successfully. This block has no return value and takes three arguments: the server response, the serializer used to serialize the response data, and the response object created by that serializer.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a single arguments: the error describing the network or parsing error that occurred.
- */
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                         progress:(void (^)(uint32_t bytesWritten, uint32_t totalBytesWritten, uint32_t totalBytesExpectedToWrite))progress
-                                          success:(void (^)(NSHTTPURLResponse *response, id <AFURLResponseSerialization> serializer, id responseObject))success
-                                          failure:(void (^)(NSError *error))failure;
-
-///-----------------------------
-/// @name Running Download Tasks
-///-----------------------------
-
-/**
- Creates an `NSURLSessionDownloadTask` with the specified request.
-
- @param request The HTTP request for the request.
- @param progress A block object to be executed multiple times as data is downloaded. This block has no return value and takes three arguments: the number of bytes read since the last time the progress block was called, the total bytes read, and the total bytes expected to be read from the server, as initially determined by the expected content size of the response object.
- @param success A block object to be executed when the task finishes successfully. This block takes a single argument, the server response, and returns the desired file URL of the resulting download. The temporary file used during the download will be automatically deleted after being moved to the returned URL.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a single arguments: the error describing the network or parsing error that occurred.
- */
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                             progress:(void (^)(uint32_t bytesRead, uint32_t totalBytesRead, uint32_t totalBytesExpectedToRead))progress
-                                              success:(NSURL * (^)(NSHTTPURLResponse *response))success
-                                              failure:(void (^)(NSError *error))failure;
-
-/**
- Creates an `NSURLSessionDownloadTask` with the specified resume data.
-
- @param resumeData The data used to resume downloading.
- @param progress A block object to be executed multiple times as data is downloaded. This block has no return value and takes three arguments: the number of bytes read since the last time the progress block was called, the total bytes read, and the total bytes expected to be read from the server, as initially determined by the expected content size of the response object.
- @param success A block object to be executed when the task finishes successfully. This block takes a single argument, the server response, and returns the desired file URL of the resulting download. The temporary file used during the download will be automatically deleted after being moved to the returned URL.
- @param failure A block object to be executed when the request operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a single arguments: the error describing the network or parsing error that occurred.
- */
-- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
-                                                progress:(void (^)(uint32_t bytesRead, uint32_t totalBytesRead, uint32_t totalBytesExpectedToRead))progress
-                                                 success:(NSURL * (^)(NSHTTPURLResponse *response))success
-                                                 failure:(void (^)(NSError *error))failure;
+//Cancel
+-(void)cancelAllRequests;
 
 @end
 

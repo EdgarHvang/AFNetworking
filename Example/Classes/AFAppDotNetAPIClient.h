@@ -21,9 +21,9 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "AFHTTPClient.h"
+#import "AFURLSessionClient.h"
 
-@interface AFAppDotNetAPIClient : AFHTTPClient
+@interface AFAppDotNetAPIClient : AFURLSessionClient
 
 + (AFAppDotNetAPIClient *)sharedClient;
 

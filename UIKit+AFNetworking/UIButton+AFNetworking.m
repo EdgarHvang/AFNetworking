@@ -34,7 +34,7 @@
     static AFHTTPClient *_af_sharedHTTPClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _af_sharedHTTPClient = [[AFHTTPClient alloc] initWithSessionConfiguration:nil]; // TODO allow anonymous HTTP clients
+        _af_sharedHTTPClient = [[AFHTTPClient alloc] initWithBaseURL:nil]; // TODO allow anonymous HTTP clients
         _af_sharedHTTPClient.responseSerializer = [AFImageSerializer serializer];
     });
 
@@ -106,24 +106,25 @@
 {
     
     [self setValue:placeholderImage forKeyPath:keyPath];
-
-    NSURLSessionTask *task = [[[self class] af_sharedHTTPClient] dataTaskWithRequest:urlRequest success:^(NSHTTPURLResponse *response, id <AFURLResponseSerialization> __unused serializer, id responseObject) {
-        if (success) {
-            success(response, responseObject);
-        } else if (responseObject) {
-            [self setValue:responseObject forKeyPath:keyPath];
-        }
-    } failure:^(NSError *error) {
-        if (failure) {
-            failure(error);
-        }
-    }];
-
-    [task resume];
+#warning
+//    NSURLSessionTask *task = [[[self class] af_sharedHTTPClient] dataTaskWithRequest:urlRequest success:^(NSHTTPURLResponse *response, id <AFURLResponseSerialization> __unused serializer, id responseObject) {
+//        if (success) {
+//            success(response, responseObject);
+//        } else if (responseObject) {
+//            [self setValue:responseObject forKeyPath:keyPath];
+//        }
+//    } failure:^(NSError *error) {
+//        if (failure) {
+//            failure(error);
+//        }
+//    }];
+//
+//    [task resume];
 }
 
 - (void)cancelImageDataTasks {
-    [[[[self class] af_sharedHTTPClient] tasks] makeObjectsPerformSelector:@selector(cancel)];
+
+    [[[self class] af_sharedHTTPClient] cancelAllRequests];
 }
 
 @end
