@@ -79,7 +79,9 @@
 ///---------------------------
 /// @name Making HTTP Requests
 ///---------------------------
-
+- (AFHTTPRequestOperation *)startRequest:(NSURLRequest *)request
+                                 success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                                 failure:(void (^)(NSError *error))failure;
 /**
  Creates and runs an `NSURLSessionDataTask` with a `GET` request.
  

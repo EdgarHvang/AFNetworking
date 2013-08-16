@@ -49,71 +49,62 @@
 }
 
 #pragma mark -
-- (AFHTTPRequestOperation *)GET:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *, id))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"GET" URLString:URLString parameters:parameters];
+- (AFHTTPRequestOperation *)startRequest:(NSURLRequest *)request
+                                 success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                                 failure:(void (^)(NSError *error))failure{
     AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
     [self enqueueHTTPRequestOperation:op];
     return op;
 }
 
-- (AFHTTPRequestOperation *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *, id))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"POST" URLString:URLString parameters:parameters];
-    AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+- (AFHTTPRequestOperation *)GET:(NSString *)URLString
+                     parameters:(NSDictionary *)parameters
+                        success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                        failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super GET:URLString parameters:parameters success:success failure:failure];
+}
+
+- (AFHTTPRequestOperation *)HEAD:(NSString *)URLString
+                      parameters:(NSDictionary *)parameters
+                         success:(void (^)(NSHTTPURLResponse *response))success
+                         failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super HEAD:URLString parameters:parameters success:success failure:failure];
 }
 
 - (AFHTTPRequestOperation *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
-     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
-                       success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
-                       failure:(void (^)(NSError *error))failure
-{
-    NSMutableURLRequest *request = [self multipartFormRequestWithMethod:@"POST" URLString:URLString parameters:parameters constructingBodyWithBlock:block];
-    AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+                      parameters:(NSDictionary *)parameters
+                         success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                         failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super POST:URLString parameters:parameters success:success failure:failure];
 }
 
-- (AFHTTPRequestOperation *)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *, id))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"PUT" URLString:URLString parameters:parameters];
-    AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString
+                      parameters:(NSDictionary *)parameters
+       constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+                         success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                         failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super POST:URLString parameters:parameters constructingBodyWithBlock:block success:success failure:failure];
 }
 
-- (AFHTTPRequestOperation *)HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"HEAD" URLString:URLString parameters:parameters];
-    AFHTTPRequestOperation *op = [self
-                                  HTTPRequestOperationWithRequest:request
-                                  success:^(NSHTTPURLResponse *response, id responseObject) {
-                                      if(success){
-                                          success(response);
-                                      }
-                                  }
-                                  failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+- (AFHTTPRequestOperation *)PUT:(NSString *)URLString
+                     parameters:(NSDictionary *)parameters
+                        success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                        failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super PUT:URLString parameters:parameters success:success failure:failure];
 }
 
-- (AFHTTPRequestOperation *)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *, id))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"DELETE" URLString:URLString parameters:parameters];
-    AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+- (AFHTTPRequestOperation *)PATCH:(NSString *)URLString
+                       parameters:(NSDictionary *)parameters
+                          success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                          failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super PATCH:URLString parameters:parameters success:success failure:failure];
 }
 
-- (AFHTTPRequestOperation *)PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSHTTPURLResponse *, id))success failure:(void (^)(NSError *))failure
-{
-    NSURLRequest *request = [self requestWithMethod:@"PATCH" URLString:URLString parameters:parameters];
-    AFHTTPRequestOperation *op = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [self enqueueHTTPRequestOperation:op];
-    return op;
+- (AFHTTPRequestOperation *)DELETE:(NSString *)URLString
+                        parameters:(NSDictionary *)parameters
+                           success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+                           failure:(void (^)(NSError *error))failure{
+    return (AFHTTPRequestOperation*)[super DELETE:URLString parameters:parameters success:success failure:failure];
 }
 
 #pragma mark

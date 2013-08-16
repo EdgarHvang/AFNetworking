@@ -107,20 +107,19 @@
     
     [self setValue:placeholderImage forKeyPath:keyPath];
     //TODO REVIEW THIS
-    [[[self class] af_sharedHTTPClient] GET:urlRequest.URL.absoluteString
-                                 parameters:nil
-                                    success:^(NSHTTPURLResponse *response, id responseObject) {
-                                        if (success) {
-                                            success(response, responseObject);
-                                        } else if (responseObject) {
-                                            [self setValue:responseObject forKeyPath:keyPath];
-                                        }
-                                    }
-                                    failure:^(NSError *error) {
-                                        if (failure) {
-                                            failure(error);
-                                        }
-                                    }];
+    [[[self class] af_sharedHTTPClient] startRequest:urlRequest
+                                             success:^(NSHTTPURLResponse *response, id responseObject) {
+                                                 if (success) {
+                                                     success(response, responseObject);
+                                                 } else if (responseObject) {
+                                                     [self setValue:responseObject forKeyPath:keyPath];
+                                                 }
+                                             }
+                                             failure:^(NSError *error) {
+                                                 if (failure) {
+                                                     failure(error);
+                                                 }
+                                             }];
 }
 
 - (void)cancelImageDataTasks {

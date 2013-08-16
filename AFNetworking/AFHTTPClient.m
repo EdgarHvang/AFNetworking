@@ -319,13 +319,20 @@ typedef id AFNetworkReachabilityRef;
     _responseSerializer = responseSerializer;
 }
 
+- (id)startRequest:(NSURLRequest *)request
+           success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
+           failure:(void (^)(NSError *error))failure{
+    NSAssert(@"Must be implemented by subclass", nil);
+    return nil;
+}
+
 - (id)GET:(NSString *)URLString
 parameters:(NSDictionary *)parameters
   success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
   failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"GET" URLString:URLString parameters:parameters];
+    return [self startRequest:request success:success failure:failure];
 }
 
 - (id)HEAD:(NSString *)URLString
@@ -333,8 +340,14 @@ parameters:(NSDictionary *)parameters
    success:(void (^)(NSHTTPURLResponse *response))success
    failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"HEAD" URLString:URLString parameters:parameters];
+    return [self startRequest:request
+                      success:^(NSHTTPURLResponse *response, id responseObject) {
+                          if(success){
+                              success(response);
+                          }
+                      }
+                      failure:failure];
 }
 
 - (id)POST:(NSString *)URLString
@@ -342,8 +355,8 @@ parameters:(NSDictionary *)parameters
    success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
    failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"POST" URLString:URLString parameters:parameters];
+    return [self startRequest:request success:success failure:failure];
 }
 
 - (id)POST:(NSString *)URLString
@@ -352,8 +365,8 @@ constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
    success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
    failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSMutableURLRequest *request = [self multipartFormRequestWithMethod:@"POST" URLString:URLString parameters:parameters constructingBodyWithBlock:block];
+    return [self startRequest:request success:success failure:failure];
 }
 
 - (id)PUT:(NSString *)URLString
@@ -361,8 +374,8 @@ parameters:(NSDictionary *)parameters
   success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
   failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"PUT" URLString:URLString parameters:parameters];
+    return [self startRequest:request success:success failure:failure];
 }
 
 - (id)PATCH:(NSString *)URLString
@@ -370,8 +383,8 @@ parameters:(NSDictionary *)parameters
     success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
     failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"PATCH" URLString:URLString parameters:parameters];
+    return [self startRequest:request success:success failure:failure];
 }
 
 - (id)DELETE:(NSString *)URLString
@@ -379,8 +392,8 @@ parameters:(NSDictionary *)parameters
      success:(void (^)(NSHTTPURLResponse *response, id responseObject))success
      failure:(void (^)(NSError *error))failure
 {
-    NSAssert(@"Must be implemented by subclass", nil);
-    return nil;
+    NSURLRequest *request = [self requestWithMethod:@"DELETE" URLString:URLString parameters:parameters];
+    return [self startRequest:request success:success failure:failure];
 }
 
 #pragma mark
