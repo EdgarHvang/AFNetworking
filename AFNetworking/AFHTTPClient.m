@@ -131,8 +131,13 @@ typedef id AFNetworkReachabilityRef;
     return [[AFHTTPClient alloc] initWithBaseURL:nil];
 }
 
+- (instancetype)init
+{
+    return [self initWithBaseURL:nil];
+}
+
 - (instancetype)initWithBaseURL:(NSURL *)url {
-    self = [self init];
+    self = [super init];
     if(!self){
         return nil;
     }
@@ -374,7 +379,7 @@ parameters:(NSDictionary *)parameters
     return nil;
 }
 
-#pragma mark - 
+#pragma mark
 -(void)cancelAllRequests
 {
    NSAssert(@"Must be implemented by subclass", nil);
