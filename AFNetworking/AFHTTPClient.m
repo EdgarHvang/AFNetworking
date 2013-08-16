@@ -247,11 +247,7 @@ typedef id AFNetworkReachabilityRef;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu"
-    NSURL * url = [NSURL URLWithString:URLString];
-    if(![url scheme]){
-        url = [NSURL URLWithString:(URLString ?: @"") relativeToURL:self.baseURL];
-    }
-    
+    NSURL * url = [NSURL URLWithString:(URLString ?: @"") relativeToURL:self.baseURL];
 #pragma clang diagnostic pop
 
     NSParameterAssert(url);
