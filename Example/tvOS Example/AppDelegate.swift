@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  AFNetworking tvOS Example
+//  tvOS Example1
 //
-//  Created by Kevin Harwood on 9/24/15.
-//  Copyright © 2015 Alamofire. All rights reserved.
+//  Created by Kevin Harwood on 9/28/15.
+//
 //
 
 import UIKit

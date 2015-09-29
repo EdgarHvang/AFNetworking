@@ -27,6 +27,8 @@
     #define _UIKIT_AFNETWORKING_
 
 #if TARGET_OS_IOS
+    #import "AFAutoPurgingImageCache.h"
+    #import "AFImageDownloader.h"
     #import "AFNetworkActivityIndicatorManager.h"
     #import "UIAlertView+AFNetworking.h"
     #import "UIRefreshControl+AFNetworking.h"

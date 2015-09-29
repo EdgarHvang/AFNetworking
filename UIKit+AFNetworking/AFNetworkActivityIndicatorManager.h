@@ -21,9 +21,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Availability.h>
+#import <TargetConditionals.h>
 
-#if TARGET_IOS
+#if TARGET_OS_IOS
 
 #import <UIKit/UIKit.h>
 
