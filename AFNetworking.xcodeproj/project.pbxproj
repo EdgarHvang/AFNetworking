@@ -142,7 +142,6 @@
 		299522B01BBF13C700859F49 /* UIWebView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 2995229A1BBF13C700859F49 /* UIWebView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		299522B11BBF13C700859F49 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2995229B1BBF13C700859F49 /* UIWebView+AFNetworking.m */; };
 		29D96E7A1BCC3D6000F571A5 /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522461BBF125A00859F49 /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29D96E7B1BCC3D6000F571A5 /* AFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522491BBF125A00859F49 /* AFNetworkReachabilityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29D96E7C1BCC3D6000F571A5 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2995224B1BBF125A00859F49 /* AFSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29D96E7D1BCC3D6000F571A5 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 2995224D1BBF125A00859F49 /* AFURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29D96E7E1BCC3D6000F571A5 /* AFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 2995224F1BBF125A00859F49 /* AFURLResponseSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -588,7 +587,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				29D96E7A1BCC3D6000F571A5 /* AFHTTPSessionManager.h in Headers */,
-				29D96E7B1BCC3D6000F571A5 /* AFNetworkReachabilityManager.h in Headers */,
 				29D96E7C1BCC3D6000F571A5 /* AFSecurityPolicy.h in Headers */,
 				29D96E7D1BCC3D6000F571A5 /* AFURLRequestSerialization.h in Headers */,
 				29D96E7E1BCC3D6000F571A5 /* AFURLResponseSerialization.h in Headers */,
