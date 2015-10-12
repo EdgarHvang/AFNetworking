@@ -135,7 +135,6 @@
 		299522A81BBF13C700859F49 /* UIImage+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522921BBF13C700859F49 /* UIImage+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		299522A91BBF13C700859F49 /* UIImageView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522931BBF13C700859F49 /* UIImageView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		299522AA1BBF13C700859F49 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 299522941BBF13C700859F49 /* UIImageView+AFNetworking.m */; };
-		299522AB1BBF13C700859F49 /* UIKit+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522951BBF13C700859F49 /* UIKit+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		299522AC1BBF13C700859F49 /* UIProgressView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522961BBF13C700859F49 /* UIProgressView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		299522AD1BBF13C700859F49 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 299522971BBF13C700859F49 /* UIProgressView+AFNetworking.m */; };
 		299522AE1BBF13C700859F49 /* UIRefreshControl+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 299522981BBF13C700859F49 /* UIRefreshControl+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -574,7 +573,6 @@
 				2995229E1BBF13C700859F49 /* AFImageDownloader.h in Headers */,
 				2995225E1BBF125A00859F49 /* AFURLSessionManager.h in Headers */,
 				2995225C1BBF125A00859F49 /* AFURLResponseSerialization.h in Headers */,
-				299522AB1BBF13C700859F49 /* UIKit+AFNetworking.h in Headers */,
 				299522A21BBF13C700859F49 /* UIActivityIndicatorView+AFNetworking.h in Headers */,
 				2995223D1BBF104D00859F49 /* AFNetworking.h in Headers */,
 				299522B01BBF13C700859F49 /* UIWebView+AFNetworking.h in Headers */,
