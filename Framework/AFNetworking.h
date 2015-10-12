@@ -29,4 +29,21 @@ FOUNDATION_EXPORT const unsigned char AFNetworkingVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AFNetworking/PublicHeader.h>
 
+#import <Availability.h>
+#import <TargetConditionals.h>
 
+#ifndef _AFNETWORKING_
+#define _AFNETWORKING_
+
+#import <AFNetworking/AFURLRequestSerialization.h>>
+#import <AFNetworking/AFURLResponseSerialization.h>
+#import <AFNetworking/AFSecurityPolicy.h>
+
+#if !TARGET_OS_WATCH
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+#endif
+
+#import <AFNetworking/AFURLSessionManager.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
+
+#endif /* _AFNETWORKING_ */
