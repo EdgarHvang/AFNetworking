@@ -137,7 +137,7 @@ lane :prepare_framework_release do |options|
       set_github_release(
         repository_name:"#{organization}/#{repository}",
         api_token:options[:api_token],
-        tag_name:version,
+        tag_name:options[:version],
         description: changelog[:changelog]
       )
     end
