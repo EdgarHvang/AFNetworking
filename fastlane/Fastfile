@@ -152,8 +152,10 @@ lane :complete_framework_release do |options|
     end
   end
   
-  if !options[:version]
-    raise "No version specified! Use 'version:VERSION_NUMBER'".red
+  if options[:version]
+    version = options[:version]
+  else 
+    version = last_git_tag
   end
   
   #Ensure clean branch
@@ -212,14 +214,14 @@ lane :complete_framework_release do |options|
     changelog = generate_github_milestone_changelog(
       github_organization: organization,
       github_repository: repository,
-      milestone: options[:version]
+      milestone: version
     )
     
     if lane_context[SharedValues::CARTHAGE_FRAMEWORK]
       set_github_release(
         repository_name:"#{organization}/#{repository}",
         api_token:options[:api_token],
-        tag_name:options[:version],
+        tag_name:version,
         description: changelog[:changelog],
         upload_assets: [lane_context[SharedValues::CARTHAGE_FRAMEWORK]]
       )
@@ -227,7 +229,7 @@ lane :complete_framework_release do |options|
       set_github_release(
         repository_name:"#{organization}/#{repository}",
         api_token:options[:api_token],
-        tag_name:options[:version],
+        tag_name:version,
         description: changelog[:changelog]
       )
     end
