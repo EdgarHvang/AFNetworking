@@ -121,17 +121,37 @@ lane :prepare_framework_release do |options|
       remote: remote
     )
     
-    # tag the repo  
-    add_git_tag(
-      tag: "#{options[:version]}"
-    )
+    if options[:github_organization]
+      organization = options[:github_organization]
+    elsif ENV["DEPLOY_GITHUB_ORGANIZATION"]
+      organization = ENV["DEPLOY_GITHUB_ORGANIZATION"]
+    end
   
-    # push the tag
-    if options [:skip_push_tags] != true
-      push_git_tags_to_remote(
-        remote: remote
+    if options[:github_repository]
+      repository = options[:github_repository]
+    elsif ENV["DEPLOY_GITHUB_REPOSITORY"]
+      repository = ENV["DEPLOY_GITHUB_REPOSITORY"]
+    end
+    if options[:skip_github_release]
+      set_github_release(
+        repository_name:"#{organization}/#{repository}",
+        api_token:options[:api_token],
+        tag_name:version,
+        description: changelog[:changelog]
       )
     end
+    
+    # # tag the repo
+    # add_git_tag(
+    #   tag: "#{options[:version]}"
+    # )
+    #
+    # # push the tag
+    # if options [:skip_push_tags] != true
+    #   push_git_tags_to_remote(
+    #     remote: remote
+    #   )
+    # end
     
     if !is_ci
       notification(
@@ -198,43 +218,43 @@ lane :complete_framework_release do |options|
     #* Upload Notes
     #* Upload Carthage Asset
     
-  if options[:github_organization]
-    organization = options[:github_organization]
-  elsif ENV["DEPLOY_GITHUB_ORGANIZATION"]
-    organization = ENV["DEPLOY_GITHUB_ORGANIZATION"]
-  end
-  
-  if options[:github_repository]
-    repository = options[:github_repository]
-  elsif ENV["DEPLOY_GITHUB_REPOSITORY"]
-    repository = ENV["DEPLOY_GITHUB_REPOSITORY"]
-  end
-  
-  if options[:skip_github_release] != true
-    changelog = generate_github_milestone_changelog(
-      github_organization: organization,
-      github_repository: repository,
-      milestone: version
-    )
-    
-    if lane_context[SharedValues::CARTHAGE_FRAMEWORK]
-      set_github_release(
-        repository_name:"#{organization}/#{repository}",
-        api_token:options[:api_token],
-        tag_name:version,
-        description: changelog[:changelog],
-        upload_assets: [lane_context[SharedValues::CARTHAGE_FRAMEWORK]]
-      )
-    else
-      set_github_release(
-        repository_name:"#{organization}/#{repository}",
-        api_token:options[:api_token],
-        tag_name:version,
-        description: changelog[:changelog]
-      )
-    end
-      
-  end
+  # if options[:github_organization]
+  #   organization = options[:github_organization]
+  # elsif ENV["DEPLOY_GITHUB_ORGANIZATION"]
+  #   organization = ENV["DEPLOY_GITHUB_ORGANIZATION"]
+  # end
+  #
+  # if options[:github_repository]
+  #   repository = options[:github_repository]
+  # elsif ENV["DEPLOY_GITHUB_REPOSITORY"]
+  #   repository = ENV["DEPLOY_GITHUB_REPOSITORY"]
+  # end
+  #
+  # if options[:skip_github_release] != true
+  #   changelog = generate_github_milestone_changelog(
+  #     github_organization: organization,
+  #     github_repository: repository,
+  #     milestone: version
+  #   )
+  #
+  #   if lane_context[SharedValues::CARTHAGE_FRAMEWORK]
+  #     set_github_release(
+  #       repository_name:"#{organization}/#{repository}",
+  #       api_token:options[:api_token],
+  #       tag_name:version,
+  #       description: changelog[:changelog],
+  #       upload_assets: [lane_context[SharedValues::CARTHAGE_FRAMEWORK]]
+  #     )
+  #   else
+  #     set_github_release(
+  #       repository_name:"#{organization}/#{repository}",
+  #       api_token:options[:api_token],
+  #       tag_name:version,
+  #       description: changelog[:changelog]
+  #     )
+  #   end
+  #
+  # end
     
     #pod trunk push
     if options[:skip_pod_push] != true
