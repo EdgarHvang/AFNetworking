@@ -138,7 +138,9 @@ lane :prepare_framework_release do |options|
         repository_name:"#{organization}/#{repository}",
         api_token:options[:api_token],
         tag_name:options[:version],
-        description: changelog[:changelog]
+        name:options[:version],
+        is_prerelease:true,
+        is_draft:false
       )
     end
     
