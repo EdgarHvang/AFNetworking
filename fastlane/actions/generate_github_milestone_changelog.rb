@@ -24,7 +24,7 @@ module Fastlane
         require 'net/http'
         require 'fileutils'
         
-        url = "https://api.github.com/search/issues?q=repo%3A#{params[:github_organization]}%2F#{params[:github_repository]}+milestone%3A#{params[:milestone]}+state%3Aclosed"
+        url = "https://api.github.com/search/issues?q=repo%3A#{params[:github_owner]}%2F#{params[:github_repository]}+milestone%3A#{params[:milestone]}+state%3Aclosed"
         
         begin
           response = Net::HTTP.get(URI(url))
@@ -66,7 +66,7 @@ module Fastlane
         date = DateTime.now
         result = Hash.new
         result[:header] = "\n\n##[#{params[:milestone]}](https://github.com/#{params[:github_owner]}/#{params[:github_repository]}/releases/tag/#{params[:milestone]}) (#{date.strftime("%m/%d/%Y")})"
-        result[:header] << "\nReleased on #{date.strftime("%A, %B %d, %Y")}. All issues associated with this milestone can be found using this [filter](https://github.com/#{params[:github_organization]}/#{params[:github_repository]}/issues?q=milestone%3A#{params[:milestone]}+is%3Aclosed)."
+        result[:header] << "\nReleased on #{date.strftime("%A, %B %d, %Y")}. All issues associated with this milestone can be found using this [filter](https://github.com/#{params[:github_owner]}/#{params[:github_repository]}/issues?q=milestone%3A#{params[:milestone]}+is%3Aclosed)."
         
         result[:changelog] = "\n"
         sections.each do |section|
