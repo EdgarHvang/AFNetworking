@@ -33,3 +33,5 @@ Tests/AFNetworking Tests.xcodeproj/xcshareddata/xcschemes/
 # frameit generated screenshots
 /fastlane/screenshots/*/*-portrait_framed.png
 /fastlane/screenshots/*/*-landscape_framed.png
+# private envs
+/fastlane/.env*private*
