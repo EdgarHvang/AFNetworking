@@ -33,21 +33,8 @@ lane :prepare_framework_release do |options|
     ensure_git_status_clean
   end
   
-  if options[:remote]
-    remote = options[:remote]
-  elsif ENV["DEPLOY_REMOTE"]
-    remote = ENV["DEPLOY_REMOTE"]
-  else 
-    remote = "origin"
-  end
-  
-  if options[:allow_branch]
-    allowed_branch = options[:allow_branch]
-  elsif ENV["DEPLOY_BRANCH"]
-    allowed_branch = ENV["DEPLOY_BRANCH"]
-  else 
-    allowed_branch = "master"
-  end
+  remote = options[:remote] ? options[:remote] : (ENV["DEPLOY_REMOTE"] ? ENV["DEPLOY_REMOTE"] : "origin")
+  allowed_branch = options[:allow_branch] ? options[:allow_branch] : (ENV["DEPLOY_BRANCH"] ? ENV["DEPLOY_BRANCH"] : "master")
   
   #Ensure we are on the right branch
   ensure_git_branch(
@@ -61,14 +48,7 @@ lane :prepare_framework_release do |options|
   
   #Update the framework plist
   if options[:skip_plist_update] != true
-    if options[:plist_path]
-      plist_path = options[:plist_path]
-    elsif ENV["DEPLOY_PLIST_PATH"]
-      plist_path = ENV["DEPLOY_PLIST_PATH"]
-    else 
-      raise "No plist path specified. Use 'plist_path:'".red
-    end
-  
+    plist_path = options[:plist_path] ? options[:plist_path] : ENV["DEPLOY_PLIST_PATH"]
     set_info_plist_value(
       path: plist_path,
       key: "CFBundleVersion",
@@ -78,17 +58,10 @@ lane :prepare_framework_release do |options|
 
   #Update the podspec
   if options[:skip_podspec_update] != true
-    if options[:podspec]
-      podspec = options[:podpsec]
-    elsif ENV["DEPLOY_PODSPEC"]
-      podspec = ENV["DEPLOY_PODSPEC"]
-    else 
-      raise "No podspec path specified. Use 'podspec:'".red
-    end
-  
+    podspec = options[:podpsec] ? options[:podpsec] : ENV["DEPLOY_PODSPEC"]
     version_bump_podspec(
-    path: podspec,
-    version_number: options[:version]
+      path: podspec,
+      version_number: options[:version]
     )
     
   end
@@ -96,8 +69,6 @@ lane :prepare_framework_release do |options|
   #Generate a Changelog
   if options[:skip_changelog] != true
     changelog = generate_github_milestone_changelog(
-      github_organization: ENV["DEPLOY_GITHUB_ORGANIZATION"],
-      github_repository: ENV["DEPLOY_GITHUB_REPOSITORY"],
       milestone: options[:version]
     )
     
@@ -152,32 +123,15 @@ lane :complete_framework_release do |options|
     end
   end
   
-  if options[:version]
-    version = options[:version]
-  else 
-    version = last_git_tag
-  end
+  version = options[:version] ? options[:version] : last_git_tag
   
   #Ensure clean branch
   if options[:allow_dirty_branch] != true
     ensure_git_status_clean
   end
   
-  if options[:remote]
-    remote = options[:remote]
-  elsif ENV["DEPLOY_REMOTE"]
-    remote = ENV["DEPLOY_REMOTE"]
-  else 
-    remote = "origin"
-  end
-  
-  if options[:allow_branch]
-    allowed_branch = options[:allow_branch]
-  elsif ENV["DEPLOY_BRANCH"]
-    allowed_branch = ENV["DEPLOY_BRANCH"]
-  else 
-    allowed_branch = "master"
-  end
+  remote = options[:remote] ? options[:remote] : (ENV["DEPLOY_REMOTE"] ? ENV["DEPLOY_REMOTE"] : "origin")
+  allowed_branch = options[:allow_branch] ? options[:allow_branch] : (ENV["DEPLOY_BRANCH"] ? ENV["DEPLOY_BRANCH"] : "master")
   
   #Ensure we are on the right branch
   ensure_git_branch(
@@ -189,60 +143,39 @@ lane :complete_framework_release do |options|
     sh("git pull #{remote} #{allowed_branch}")
   end
   
-  # generate the carthage zip
-  if options[:skip_carthage_framework] != true
-    build_carthage_frameworks()
-  end
-  
   # Create a release
     #* Upload Notes
-    #* Upload Carthage Asset
+    #* Upload Carthage Asset  
+  if options[:skip_github_release] != true
+    generate_github_milestone_changelog(
+          milestone: options[:version]
+        )
     
-  # if options[:github_organization]
-  #   organization = options[:github_organization]
-  # elsif ENV["DEPLOY_GITHUB_ORGANIZATION"]
-  #   organization = ENV["DEPLOY_GITHUB_ORGANIZATION"]
-  # end
-  #
-  # if options[:github_repository]
-  #   repository = options[:github_repository]
-  # elsif ENV["DEPLOY_GITHUB_REPOSITORY"]
-  #   repository = ENV["DEPLOY_GITHUB_REPOSITORY"]
-  # end
-  #
-  # if options[:skip_github_release] != true
-  #   changelog = generate_github_milestone_changelog(
-  #     github_organization: organization,
-  #     github_repository: repository,
-  #     milestone: version
-  #   )
-  #
-  #   if lane_context[SharedValues::CARTHAGE_FRAMEWORK]
-  #     set_github_release(
-  #       repository_name:"#{organization}/#{repository}",
-  #       api_token:options[:api_token],
-  #       tag_name:version,
-  #       description: changelog[:changelog],
-  #       upload_assets: [lane_context[SharedValues::CARTHAGE_FRAMEWORK]]
-  #     )
-  #   else
-  #     set_github_release(
-  #       repository_name:"#{organization}/#{repository}",
-  #       api_token:options[:api_token],
-  #       tag_name:version,
-  #       description: changelog[:changelog]
-  #     )
-  #   end
-  #
-  # end
-    
-    #pod trunk push
-    if options[:skip_pod_push] != true
-      pod_push
+    af_create_github_release(,
+        tag_name: version,
+        name: version,
+        body: lane_context[SharedValues::GITHUB_MILESTONE_CHANGELOG][:changelog],
+        prerelease: true
+      )
       
-      #pod spec lint
-      pod_spec_lint
-    end
+      # generate the carthage zip
+      if options[:skip_carthage_framework] != true
+        build_carthage_frameworks()
+        
+        af_upload_asset_for_github_release(
+          file_path:lane_context[SharedValues::CARTHAGE_FRAMEWORK]
+        )
+        
+      end
+  end
+  
+  #pod trunk push
+  if options[:skip_pod_push] != true
+    pod_push
+    
+    #pod spec lint
+    pod_spec_lint
+  end
 end
 
 lane :travis_commit do |options|

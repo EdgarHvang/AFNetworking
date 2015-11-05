@@ -40,7 +40,7 @@ module Fastlane
         items = response["items"]
         
         if items.count == 0 && params[:allow_empty_changelog] == false
-          raise "No closed issues found for #{params[:milestone]} in #{params[:github_organization]}/#{params[:github_repository]}".red
+          raise "No closed issues found for #{params[:milestone]} in #{params[:github_owner]}/#{params[:github_repository]}".red
         end
 
         labels = [params[:added_label_name], params[:updated_label_name], params[:changed_label_name], params[:fixed_label_name], params[:removed_label_name]]
@@ -65,7 +65,7 @@ module Fastlane
         
         date = DateTime.now
         result = Hash.new
-        result[:header] = "\n\n##[#{params[:milestone]}](https://github.com/#{params[:github_organization]}/#{params[:github_repository]}/releases/tag/#{params[:milestone]}) (#{date.strftime("%m/%d/%Y")})"
+        result[:header] = "\n\n##[#{params[:milestone]}](https://github.com/#{params[:github_owner]}/#{params[:github_repository]}/releases/tag/#{params[:milestone]}) (#{date.strftime("%m/%d/%Y")})"
         result[:header] << "\nReleased on #{date.strftime("%A, %B %d, %Y")}. All issues associated with this milestone can be found using this [filter](https://github.com/#{params[:github_organization]}/#{params[:github_repository]}/issues?q=milestone%3A#{params[:milestone]}+is%3Aclosed)."
         
         result[:changelog] = "\n"
@@ -92,12 +92,12 @@ module Fastlane
 
       def self.available_options
         [
-          FastlaneCore::ConfigItem.new(key: :github_organization,
-                                       env_name: "FL_GENERATE_GITHUB_MILESTONE_CHANGELOG_ORGANIZATION", 
-                                       description: "Github Organization for the repository",
+          FastlaneCore::ConfigItem.new(key: :github_owner,
+                                       env_name: "GITHUB_OWNER", 
+                                       description: "Github Owner for the repository",
                                        is_string: true),
           FastlaneCore::ConfigItem.new(key: :github_repository,
-                                       env_name: "FL_GENERATE_GITHUB_MILESTONE_CHANGELOG_REPOSITORY",
+                                       env_name: "GITHUB_REPOSITORY",
                                        description: "Github Repository containing the milestone",
                                        is_string: true),
           FastlaneCore::ConfigItem.new(key: :milestone,
