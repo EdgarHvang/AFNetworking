@@ -20,7 +20,7 @@ module Fastlane
 
         begin
           name = params[:name] ? params[:name] : File.basename(params[:file_path])
-          expanded_url = Addressable::Template.new(params[:upload_url_template]).expand(name: name).to_s
+          expanded_url = Addressable::Template.new(params[:upload_url_template]).expand({name: name, label:params[:label]}).to_s
           
           uri = URI(expanded_url)
 
@@ -97,6 +97,11 @@ module Fastlane
                        FastlaneCore::ConfigItem.new(key: :name,
                                                     env_name: "GITHUB_RELEASE_UPLOAD_NAME",
                                                     description: "Name of the upload asset. Defaults to the base name of 'file_path'}",
+                                                    is_string: true,
+                                                    optional: true),
+                       FastlaneCore::ConfigItem.new(key: :label,
+                                                    env_name: "GITHUB_RELEASE_UPLOAD_LABEL",
+                                                    description: "An alternate short description of the asset",
                                                     is_string: true,
                                                     optional: true),
                        FastlaneCore::ConfigItem.new(key: :content_type,

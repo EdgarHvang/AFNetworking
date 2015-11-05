@@ -163,8 +163,11 @@ lane :complete_framework_release do |options|
       if options[:skip_carthage_framework] != true
         af_build_carthage_frameworks
         
+        carthage_version = sh("carthage version").strip
+        xcode_version = sh("xcodebuild -version").gsub!(/[\n]+/, " ").strip
         af_upload_asset_for_github_release(
-          file_path:lane_context[SharedValues::CARTHAGE_FRAMEWORK]
+          file_path:lane_context[SharedValues::CARTHAGE_FRAMEWORK],
+          label:"Built by Carthage #{carthage_version} using #{xcode_version}"
         )
         
       end
