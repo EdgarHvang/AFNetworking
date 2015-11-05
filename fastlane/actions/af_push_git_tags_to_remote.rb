@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class PushGitTagsToRemoteAction < Action
+    class AfPushGitTagsToRemoteAction < Action
       def self.run(params)
           commands = ["git", "push"]
             

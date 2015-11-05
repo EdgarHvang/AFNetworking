@@ -68,11 +68,11 @@ lane :prepare_framework_release do |options|
 
   #Generate a Changelog
   if options[:skip_changelog] != true
-    changelog = generate_github_milestone_changelog(
+    changelog = af_generate_github_milestone_changelog(
       milestone: options[:version]
     )
     
-    insert_text_into_file(
+    af_insert_text_into_file(
       file_path: ENV["DEPLOY_CHANGELOG_PATH"],
       text: changelog[:header] + changelog[:changelog],
       insert_delimeter: ENV["DEPLOY_CHANGELOG_DELIMTER"]
@@ -99,7 +99,7 @@ lane :prepare_framework_release do |options|
 
     # push the tag
     if options [:skip_push_tags] != true
-      push_git_tags_to_remote(
+      af_push_git_tags_to_remote(
         remote: remote
       )
     end
@@ -148,7 +148,7 @@ lane :complete_framework_release do |options|
     #* Upload Notes
     #* Upload Carthage Asset  
   if options[:skip_github_release] != true
-    generate_github_milestone_changelog(
+    af_generate_github_milestone_changelog(
           milestone: version
         )
     
@@ -161,7 +161,7 @@ lane :complete_framework_release do |options|
       
       # generate the carthage zip
       if options[:skip_carthage_framework] != true
-        build_carthage_frameworks()
+        af_build_carthage_frameworks
         
         af_upload_asset_for_github_release(
           file_path:lane_context[SharedValues::CARTHAGE_FRAMEWORK]
@@ -175,7 +175,7 @@ lane :complete_framework_release do |options|
     pod_push
     
     #pod spec lint
-    pod_spec_lint
+    af_pod_spec_lint
   end
 end
 

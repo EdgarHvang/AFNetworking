@@ -10,7 +10,7 @@ module Fastlane
     # - Move this integration into lib/fastlane/actions
     # - Commit, push and submit the pull request
 
-    class GenerateGithubMilestoneChangelogAction < Action
+    class AfGenerateGithubMilestoneChangelogAction < Action
       def self.markdown_for_changelog_section (section, items)
         changelog = "\n#####{section}\n"
         items.each do |item|

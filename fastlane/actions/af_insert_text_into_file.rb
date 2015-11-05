@@ -6,7 +6,7 @@ module Fastlane
     # - Clone the forked repository
     # - Move this integration into lib/fastlane/actions
     # - Commit, push and submit the pull request
-    class InsertTextIntoFileAction < Action
+    class AfInsertTextIntoFileAction < Action
       def self.replace(filepath, regexp, *args, &block)
         content = File.read(filepath).gsub(regexp, *args, &block)
         File.open(filepath, 'wb') { |file| file.write(content) }

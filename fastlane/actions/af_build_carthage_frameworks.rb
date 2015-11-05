@@ -10,7 +10,7 @@ module Fastlane
     # - Move this integration into lib/fastlane/actions
     # - Commit, push and submit the pull request
 
-    class BuildCarthageFrameworksAction < Action
+    class AfBuildCarthageFrameworksAction < Action
       def self.run(params)
 
         Actions.sh("carthage build --no-skip-current")

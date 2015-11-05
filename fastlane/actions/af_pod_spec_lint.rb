@@ -7,7 +7,7 @@ module Fastlane
     # - Move this integration into lib/fastlane/actions
     # - Commit, push and submit the pull request
 
-    class PodSpecLintAction < Action
+    class AfPodSpecLintAction < Action
       def self.run(params)
         commands = ["pod", "spec", "lint"]
         if params[:path]
