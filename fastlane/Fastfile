@@ -148,7 +148,7 @@ lane :complete_framework_release do |options|
     #* Upload Carthage Asset  
   if options[:skip_github_release] != true
     generate_github_milestone_changelog(
-          milestone: options[:version]
+          milestone: version
         )
     
     af_create_github_release(
