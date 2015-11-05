@@ -151,7 +151,7 @@ lane :complete_framework_release do |options|
           milestone: options[:version]
         )
     
-    af_create_github_release(,
+    af_create_github_release(
         tag_name: version,
         name: version,
         body: lane_context[SharedValues::GITHUB_MILESTONE_CHANGELOG][:changelog],
