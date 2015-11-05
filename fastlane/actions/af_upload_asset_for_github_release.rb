@@ -108,8 +108,6 @@ module Fastlane
       end
 
       def self.output
-        # Define the shared values you are going to provide
-        # Example
         [
           ['GITHUB_UPLOAD_ASSET_URL', 'A url for the newly created asset']
         ]

@@ -75,7 +75,7 @@ lane :prepare_framework_release do |options|
     af_insert_text_into_file(
       file_path: ENV["DEPLOY_CHANGELOG_PATH"],
       text: changelog[:header] + changelog[:changelog],
-      insert_delimeter: ENV["DEPLOY_CHANGELOG_DELIMTER"]
+      insert_delimiter: ENV["DEPLOY_CHANGELOG_DELIMTER"]
     )
   end
 

@@ -15,8 +15,6 @@ module Fastlane
 
         Actions.sh("carthage build --no-skip-current")
         Actions.sh("carthage archive #{params[:framework_name]}")
-        
-        # sh "shellcommand ./path"
 
         path = "#{params[:framework_name]}.framework.zip"
 
@@ -36,9 +34,6 @@ module Fastlane
       end
 
       def self.available_options
-        # Define all options your action supports. 
-        
-        # Below a few examples
         [
           FastlaneCore::ConfigItem.new(key: :framework_name,
                                        env_name: "FL_CARTHAGE_FRAMEWORK_NAME", # The name of the environment variable
@@ -48,8 +43,6 @@ module Fastlane
       end
 
       def self.output
-        # Define the shared values you are going to provide
-        # Example
         [
           ['CARTHAGE_FRAMEWORK', 'The path to the generate Carthage framework']
         ]
@@ -60,7 +53,6 @@ module Fastlane
       end
 
       def self.authors
-        # So no one will ever forget your contribution to fastlane :) You are awesome btw!
         ["kcharwood"]
       end
 

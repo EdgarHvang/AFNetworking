@@ -13,8 +13,8 @@ module Fastlane
       end
       
       def self.run(params)
-        if params[:insert_delimeter]
-          replace(params[:file_path], /^#{params[:insert_delimeter]}/mi) do |match| 
+        if params[:insert_delimiter]
+          replace(params[:file_path], /^#{params[:insert_delimiter]}/mi) do |match| 
             "#{match} #{params[:text]}"
           end
         elsif params[:insert_at_bottom] == true
@@ -32,13 +32,11 @@ module Fastlane
       #####################################################
 
       def self.description
-        "A short description with <= 80 characters of what this action does"
+        "Insert text into a file"
       end
 
       def self.details
-        # Optional:
-        # this is your change to provide a more detailed description of this action
-        "You can use this action to do cool things..."
+        "Insert text at the top, bottom, or after a delimiter in a file"
       end
 
       def self.available_options
@@ -52,12 +50,12 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :text,
                                        description: "The text to insert",
                                        is_string: true),
-          FastlaneCore::ConfigItem.new(key: :insert_delimeter,
+          FastlaneCore::ConfigItem.new(key: :insert_delimiter,
                                        description: "The delimiter indicating where to insert the text in the file",
                                        is_string: true,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :insert_at_bottom,
-                                       description: "If no 'insert_delimeter' is provided, the text will be appended to the bottom
+                                       description: "If no 'insert_delimiter' is provided, the text will be appended to the bottom
 of the file if this value is true, or to the top if this value is false",
                                        is_string: false,
                                        default_value: true),
@@ -71,7 +69,6 @@ of the file if this value is true, or to the top if this value is false",
       end
 
       def self.authors
-        # So no one will ever forget your contribution to fastlane :) You are awesome btw!
         ["kcharwood"]
       end
 
