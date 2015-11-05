@@ -57,7 +57,8 @@ module Fastlane
         case res.code.to_i
           when 201
           json = JSON.parse(res.body)
-          Helper.log.info "Github Release updated".green
+          Helper.log.info "Github Release Created (#{json["id"]})".green
+          Helper.log.info "#{json["html_url"]}".green
           
           Actions.lane_context[SharedValues::GITHUB_RELEASE_ID] = json["id"]
           Actions.lane_context[SharedValues::GITHUB_RELEASE_HTML_URL] = json["html_url"]
