@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ##[3.0.0](https://github.com/kcharwood/AFNetworking/releases/tag/3.0.0) (11/05/2015)
 Released on Thursday, November 05, 2015. All issues associated with this milestone can be found using this [filter](https://github.com/kcharwood/AFNetworking/issues?q=milestone%3A3.0.0+is%3Aclosed).
+ 
+
+##[3.0.0](https://github.com/kcharwood/AFNetworking/releases/tag/3.0.0) (11/05/2015)
+Released on Thursday, November 05, 2015. All issues associated with this milestone can be found using this [filter](https://github.com/kcharwood/AFNetworking/issues?q=milestone%3A3.0.0+is%3Aclosed).
 
 
 ## [2.6.0](https://github.com/AFNetworking/AFNetworking/releases/tag/2.6.0) (08-19-2015)
