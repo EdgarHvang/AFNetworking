@@ -3,6 +3,7 @@ module Fastlane
     module SharedValues
       GITHUB_RELEASE_ID = :GITHUB_RELEASE_ID
       GITHUB_RELEASE_HTML_URL = :GITHUB_RELEASE_HTML_URL
+      GITHUB_RELEASE_UPLOAD_URL_TEMPLATE = :GITHUB_RELEASE_UPLOAD_URL_TEMPLATE
     end
 
     # To share this integration with the other fastlane users:
@@ -61,6 +62,7 @@ module Fastlane
           
           Actions.lane_context[SharedValues::GITHUB_RELEASE_ID] = json["id"]
           Actions.lane_context[SharedValues::GITHUB_RELEASE_HTML_URL] = json["html_url"]
+          Actions.lane_context[SharedValues::GITHUB_RELEASE_UPLOAD_URL_TEMPLATE] = json["upload_url"]
           return json
           when 400..499 
           json = JSON.parse(res.body)
@@ -138,7 +140,8 @@ module Fastlane
       def self.output
         [
           ['GITHUB_RELEASE_ID', 'The Github Release ID'],
-          ['GITHUB_RELEASE_HTML_URL', 'The Github Release URL']
+          ['GITHUB_RELEASE_HTML_URL', 'The Github Release URL'],
+          ['GITHUB_RELEASE_UPLOAD_URL_TEMPLATE', 'The Github Release Upload URL']
         ]
       end
 
