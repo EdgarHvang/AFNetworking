@@ -512,7 +512,7 @@
 # pragma mark - Server Trust
 
 - (void)testInvalidServerTrustProducesCorrectErrorForCertificatePinning {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request should fail"];
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request should fail with untrusted certificate error"];
     NSURL *googleCertificateURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"google.com" withExtension:@"cer"];
     NSData *googleCertificateData = [NSData dataWithContentsOfURL:googleCertificateURL];
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://apple.com/"]];
@@ -537,7 +537,7 @@
 }
 
 - (void)testInvalidServerTrustProducesCorrectErrorForPublicKeyPinning {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request should fail"];
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request should fail with untrusted certificate error"];
     NSURL *googleCertificateURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"google.com" withExtension:@"cer"];
     NSData *googleCertificateData = [NSData dataWithContentsOfURL:googleCertificateURL];
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://apple.com/"]];
