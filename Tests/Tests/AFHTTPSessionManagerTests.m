@@ -566,11 +566,14 @@
 - (void)testAuthenticationChallengeHandlerCredentialResult {
     __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request succeed with provided credentials"];
     self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [self.manager setAuthenticationChallengeHandler:^id _Nonnull(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, NSURLAuthenticationChallenge * _Nonnull challenge, void (^ _Nonnull completionHandler)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable)) {
-        if ([challenge.protectionSpace.realm isEqualToString:@"Fake Realm"]) {
-            return [NSURLCredential credentialWithUser:@"user" password:@"passwd" persistence:NSURLCredentialPersistenceNone];
+    [self.manager setAuthenticationChallengeHandler:^(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, NSURLAuthenticationChallenge * _Nonnull challenge, void (^ _Nonnull completionHandler)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable, NSError * _Nullable)) {
+
+        if ([challenge.protectionSpace.realm isEqualToString:@"Fake Realm"] && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic]) {
+            NSURLCredential *credential = [NSURLCredential credentialWithUser:@"user" password:@"passwd" persistence:NSURLCredentialPersistenceNone];
+            completionHandler(NSURLSessionAuthChallengeUseCredential, credential, nil);
+        } else {
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil, nil);
         }
-        return @(NSURLSessionAuthChallengePerformDefaultHandling);
     }];
     [self.manager
      GET:@"basic-auth/user/passwd"
@@ -581,6 +584,32 @@
      }
      failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
          XCTFail(@"Request should succeed");
+         [expectation fulfill];
+     }];
+    [self waitForExpectationsWithCommonTimeoutUsingHandler:nil];
+    [self.manager invalidateSessionCancelingTasks:YES];
+}
+
+- (void)testAuthenticationChallengeHandlerErrorResult {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"Request succeed with provided credentials"];
+    self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [self.manager setAuthenticationChallengeHandler:^(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, NSURLAuthenticationChallenge * _Nonnull challenge, void (^ _Nonnull completionHandler)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable, NSError * _Nullable)) {
+
+        NSError *error = [NSError errorWithDomain:@"com.af.test" code:-1 userInfo:nil];
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil, error);
+    }];
+    [self.manager
+     GET:@"basic-auth/user/passwd"
+     parameters:nil
+     progress:nil
+     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+          XCTFail(@"Request should succeed");
+         [expectation fulfill];
+     }
+     failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+         XCTAssertNotNil(error);
+         XCTAssertTrue([error.domain isEqualToString:@"com.af.test"]);
+         XCTAssertEqual(-1, error.code);
          [expectation fulfill];
      }];
     [self waitForExpectationsWithCommonTimeoutUsingHandler:nil];
